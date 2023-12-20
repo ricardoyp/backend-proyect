@@ -7,7 +7,7 @@ passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
       const user = await prisma.user.findUnique({
-        where: { username: username }
+        where: { email: username }
       });
       if (!user) {
         return done(null, false, { message: 'Usuario no encontrado' });

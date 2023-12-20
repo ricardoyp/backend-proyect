@@ -10,6 +10,7 @@ const hbs = create({
 });
 const session = require('express-session'); 
 const passport = require('passport'); 
+
 const morgan = require('morgan'); 
 const flash = require('connect-flash');
 const methodOverride = require('method-override')
@@ -34,6 +35,8 @@ app.set('view engine', 'hbs');
 app.set('views', './views');
 
 require('./config/passport'); 
+require('./config/cloudinary'); 
+require('./config/multer'); 
 
 app.use("/", require("./routes"));
 
