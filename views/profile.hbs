@@ -1,0 +1,12 @@
+<h1>Profile page</h1>
+<div>
+    {{#if user}}
+    {{#if user.photo}}
+    <img src={{user.photo}} alt="user-image" style="width: 50px; border-radius: 50px">
+    {{/if}}
+    <p>username: {{user.username}}</p>
+    <p>email: {{user.email}}</p>
+    {{/if}}
+    <a href="/auth/logout">LogOut</a>
+    <a href="/user/update">Update profile</a>
+</div>

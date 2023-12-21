@@ -1,0 +1,15 @@
+<form action="/user/update?_method=PUT" method="POST" enctype="multipart/form-data">
+    <label for="username">
+        Username:
+        <input type="text" name="username" placeholder="Username" value={{user.username}}>
+    </label>
+    <label for="email">
+        Email:
+        <input type="email" name="email" placeholder="Email" value={{user.email}}>
+    </label>
+    <label for="photo">
+        Photo:
+        <input type="file" name="photo" value={{user.photo}}>
+    </label>
+    <input type="submit">
+</form>

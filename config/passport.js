@@ -4,10 +4,11 @@ const prisma = require('../prisma');
 const bcrypt = require('bcrypt');
 
 passport.use(new LocalStrategy(
-  async (username, password, done) => {
+  {usernameField: "email"},
+  async (email, password, done) => {
     try {
       const user = await prisma.user.findUnique({
-        where: { email: username }
+        where: { email: email }
       });
       if (!user) {
         return done(null, false, { message: 'Usuario no encontrado' });

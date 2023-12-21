@@ -41,4 +41,13 @@ router.get("/register-page", (req, res) => {
     res.render("register", { error: req.flash("error") });
 });
 
+router.get("/logout", (req, res) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/auth/login-page")
+    });
+});
+
 module.exports = router;
