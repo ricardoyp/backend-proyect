@@ -1,25 +1,58 @@
+<style>
+    .profile {
+        display: flex;
+        height: 25vh;
+    }
+
+    .izq {
+        flex: 1;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Añade overflow: hidden para ocultar las esquinas de la imagen fuera del contenedor */
+        border-radius: 50%; /* Aplica un radio de borde del 50% para hacer la imagen circular */
+    }
+
+    .izq img {
+        max-width: 100%; /* Asegúrate de que la imagen no sobrepase el contenedor */
+        border-radius: 50%; /* Aplica también un radio de borde para la imagen (opcional) */
+    }
+
+    .der {
+        flex: 3;
+        background-color: #fff;
+        padding: 20px;
+    }
+    
+</style>
+
 <h1>Profile page</h1>
-<div>
-    {{#if user}}
-    {{#if user.photo}}
-    <img src={{user.photo}} alt="user-image" style="width: 50px; border-radius: 50px">
-    {{/if}}
-    <p>username: {{user.username}}</p>
-    <p>email: {{user.email}}</p>
-    {{/if}}
+<div class="profile">
+    {{!-- FOTO --}}
+    <div class="izq">
+        <img src={{user.photo}} alt="user-image">
+    </div>
+    {{!-- TEXTO --}}
+    <div class="der">
+        <p>username: {{user.username}}</p>
+        <p>email: {{user.email}}</p>
+        <p>posts: {{posts.length}}</p> 
+    </div>
+</div>
     <a href="/auth/logout">LogOut</a>
     <a href="/user/update">Update profile</a>
-</div>
 
-{{#if user.posts}}
-    <h2>Publicaciones del usuario</h2>
-    {{#each user.posts as |post|}}
-        <div>
-            <p>Nombre de usuario: {{post.user.username}}</p>
-            <p>Ubicación: {{post.location.name}}</p>
-            <img src="{{post.photo}}" alt="imagen-de-publicacion" style="width: 50px; border-radius: 50px">
-        </div>
+{{#if posts}}
+<ul>
+    {{#each posts}}
+    <li>
+        <p>Location: {{this.location.name}}</p>
+        <img src={{this.photo}} alt="user-image" style="width: 50px; border-radius: 50px">
+        <p>Created At: {{this.createdAt}}</p>
+    </li>
     {{/each}}
+</ul>
 {{else}}
-    <p>No hay publicaciones disponibles para este usuario.</p>
+<p>No posts available for this user.</p>
 {{/if}}

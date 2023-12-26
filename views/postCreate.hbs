@@ -38,7 +38,7 @@
 
         geocoder.on('result', function (event) {
             var selectedLocation = event.result.geometry.coordinates;
-            document.getElementById('location').value = selectedLocation.join(',') +  ',' + event.result.place_name;
+            document.getElementById('location').value = selectedLocation.join(',') + ',' + event.result.place_name;
         });
     </script>
 

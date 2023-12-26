@@ -14,6 +14,7 @@ router.post("/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         await prisma.user.create({
             data: {
+                username: req.body.username,
                 email: req.body.email,
                 password: hashedPassword,
             },

@@ -6,8 +6,17 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
-router.get("/", isAuthenticated, (req, res) => {
-    res.render("profile", { user: req.user });
+router.get("/", isAuthenticated, async (req, res) => {
+    const userId = req.user.id;
+    const posts = await prisma.post.findMany({
+        where: {
+            userId: userId
+        },
+        include: {
+            location: true,
+        }
+    });
+    res.render("profile", { user: req.user, posts: posts});
 });
 
 router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) => {

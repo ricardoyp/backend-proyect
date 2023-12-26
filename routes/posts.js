@@ -11,6 +11,7 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
 
 router.post('/create', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
+        console.log(req.body.location)
         const coordinates = req.body.location.split(',');
         
         const b64 = Buffer.from(req.file.buffer).toString("base64");
