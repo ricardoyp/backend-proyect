@@ -33,7 +33,6 @@ router.post('/create', isAuthenticated, upload.single('photo'), async (req, res)
                 userId: userId,
                 locationId: location.id,
                 photo: cldRes.secure_url,
-
             },
         });
         res.redirect('/posts');
@@ -42,7 +41,6 @@ router.post('/create', isAuthenticated, upload.single('photo'), async (req, res)
         res.json('Server Error');
     }
 });
-
 
 router.get('/create', isAuthenticated, async (req, res) => {
     try {
@@ -57,8 +55,16 @@ router.get('/create', isAuthenticated, async (req, res) => {
     }
 });
 
-router.get("/", isAuthenticated, (req, res) => {
-    res.render("profile");
+router.get("/", isAuthenticated, async (req, res) => {
+    const post = await prisma.post.findMany({
+        include: {
+            location: true,
+            user: true,
+        }
+    })
+    console.log(post);
+    res.render("posts", {post: post});
 });
+
 
 module.exports = router;

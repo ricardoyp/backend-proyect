@@ -10,3 +10,16 @@
     <a href="/auth/logout">LogOut</a>
     <a href="/user/update">Update profile</a>
 </div>
+
+{{#if user.posts}}
+    <h2>Publicaciones del usuario</h2>
+    {{#each user.posts as |post|}}
+        <div>
+            <p>Nombre de usuario: {{post.user.username}}</p>
+            <p>Ubicación: {{post.location.name}}</p>
+            <img src="{{post.photo}}" alt="imagen-de-publicacion" style="width: 50px; border-radius: 50px">
+        </div>
+    {{/each}}
+{{else}}
+    <p>No hay publicaciones disponibles para este usuario.</p>
+{{/if}}
