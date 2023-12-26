@@ -25,18 +25,18 @@ model User {
 model Post {
   id                String    @id @default(uuid())
   userId            String
-  location          Location  @relation(fields: [locationId], references: [id])
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
-  user              User      @relation(fields: [userId], references: [id])
   locationId        String
   photo             String?
+  location          Location  @relation(fields: [locationId], references: [id])
+  user              User      @relation(fields: [userId], references: [id])
 }
 
 model Location {
   id          String    @id @default(uuid())
-  name        String
-  latitude     Float
-  longitude    Float
+  name        String?
+  latitude    String
+  longitude   String
   posts       Post[]
 }
