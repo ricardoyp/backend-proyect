@@ -1,0 +1,28 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `userId` on the `Post` table. All the data in the column will be lost.
+  - Added the required column `tripId` to the `Post` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- DropForeignKey
+ALTER TABLE "Post" DROP CONSTRAINT "Post_userId_fkey";
+
+-- AlterTable
+ALTER TABLE "Post" DROP COLUMN "userId",
+ADD COLUMN     "tripId" TEXT NOT NULL;
+
+-- CreateTable
+CREATE TABLE "Trip" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "Trip_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Trip" ADD CONSTRAINT "Trip_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_tripId_fkey" FOREIGN KEY ("tripId") REFERENCES "Trip"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

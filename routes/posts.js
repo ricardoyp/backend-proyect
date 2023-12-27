@@ -11,7 +11,8 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
 
 router.post('/create', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
-        console.log(req.body.location)
+        console.log(req.body.location);
+
         const coordinates = req.body.location.split(',');
         
         const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -25,10 +26,9 @@ router.post('/create', isAuthenticated, upload.single('photo'), async (req, res)
             data: {
                 latitude: coordinates[0],
                 longitude: coordinates[1],
-                name: coordinates[2]
+                name: coordinates[2] 
             }
         })
-        console.log(location);
         await prisma.post.create({
             data: {
                 userId: userId,
