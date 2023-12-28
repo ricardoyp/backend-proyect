@@ -8,15 +8,19 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
 
 router.get("/", isAuthenticated, async (req, res) => {
     const userId = req.user.id;
-    const posts = await prisma.post.findMany({
+    const trips = await prisma.trip.findMany({
         where: {
-            userId: userId
+            userId,
         },
         include: {
-            location: true,
+            post: {
+                include: {
+                    location: true
+                }
+            }
         }
-    });
-    res.render("profile", { user: req.user, posts: posts});
+    })
+    res.render("profile", { user: req.user, trips: trips});
 });
 
 router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) => {

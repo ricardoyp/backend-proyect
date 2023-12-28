@@ -1,0 +1,102 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título de tu página</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .tripView {
+            display: flex;
+            height: 100vh ;
+        }
+
+        .izqTrip,
+        .derTrip {
+            flex: 1;
+            padding: 0px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            /* Habilitar el desplazamiento vertical si el contenido es más largo que la altura del contenedor */
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            margin-top: 0px;
+            border: 10px;
+            border-color: black;
+        }
+        
+        .postBox {
+        width: auto;
+        margin: 10px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    </style>
+</head>
+
+<body>
+    <div class="tripView">
+        <div class="izqTrip">
+            <div id="map"></div>
+            <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                mapboxgl.accessToken = '{{mapBoxApiKey}}';
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    zoom: 5,
+                });
+                var coordinates = []
+                {{#each trip.post as |post|}}
+                    {{#if post.location}}
+                        // Verifica si hay coordenadas
+                        var latitude = {{post.location.latitude}};
+                        var longitude = {{post.location.longitude}};
+                        coordinates.push([latitude, longitude]);
+                        // Crea un marcador en el mapa con las coordenadas
+                        new mapboxgl.Marker()
+                            .setLngLat([latitude, longitude])
+                            .addTo(map);
+                    {{/if}}
+                {{/each}}
+                var bounds = new mapboxgl.LngLatBounds();
+                coordinates.forEach(function (marker) {
+                    bounds.extend(marker);
+                });
+                map.fitBounds(bounds, { padding: 100 });
+            });
+            </script>
+
+        </div>
+        <div class="derTrip">
+            {{#if owner}} 
+            <a href="/posts/create/{{trip.id}}">Crear Post</a>
+            {{/if}}
+            <div>
+                {{#if trip.post}}
+                <h2>Posts</h2>
+                    {{#each trip.post as |post|}}
+                        <div class="postBox">
+                        {{#if post.location}}
+                        <p>{{ post.location.name }}</p>
+                        {{/if}}
+                        {{#if post.photo}}
+                        <img src="{{post.photo}}" alt="imagen-de-publicacion" style="width: 200px; border-radius: 10px">
+                        {{/if}}
+                        </div>
+                    {{/each}}
+                {{else}}
+                <p>No hay posts disponibles para este viaje.</p>
+                {{/if}}
+        </div>
+    </div>
+</body>

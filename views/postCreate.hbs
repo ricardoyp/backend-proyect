@@ -13,7 +13,7 @@
 
 <body>
 
-    <form action='/posts/create' method='post' enctype="multipart/form-data">
+    <form action='/posts/create/{{trip.id}}' method='post' enctype="multipart/form-data">
         <label for="photo">
             Photo:
             <input type="file" name="photo" value={{user.photo}}>

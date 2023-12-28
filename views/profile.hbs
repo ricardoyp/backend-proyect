@@ -29,30 +29,27 @@
 
 <h1>Profile page</h1>
 <div class="profile">
-    {{!-- FOTO --}}
     <div class="izq">
         <img src={{user.photo}} alt="user-image">
     </div>
-    {{!-- TEXTO --}}
     <div class="der">
         <p>username: {{user.username}}</p>
         <p>email: {{user.email}}</p>
-        <p>posts: {{posts.length}}</p> 
+        <p>trips: {{trips.length}}</p> 
     </div>
 </div>
-    <a href="/auth/logout">LogOut</a>
     <a href="/user/update">Update profile</a>
 
-{{#if posts}}
+{{#if trips}}
 <ul>
-    {{#each posts}}
-    <li>
-        <p>Location: {{this.location.name}}</p>
-        <img src={{this.photo}} alt="user-image" style="width: 50px; border-radius: 50px">
-        <p>Created At: {{this.createdAt}}</p>
-    </li>
+    {{#each trips}}
+    <a href="/trip/{{this.id}}">
+        <li>
+            <p>NAME: {{this.name}}</p>
+        </li>
+    </a>
     {{/each}}
 </ul>
 {{else}}
-<p>No posts available for this user.</p>
+<p>No Trips</p>
 {{/if}}

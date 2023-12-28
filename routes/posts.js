@@ -9,9 +9,8 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
-router.post('/create', isAuthenticated, upload.single('photo'), async (req, res) => {
+router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
-        console.log(req.body.location);
 
         const coordinates = req.body.location.split(',');
         
@@ -20,18 +19,16 @@ router.post('/create', isAuthenticated, upload.single('photo'), async (req, res)
 
         const cldRes = await handleUpload(dataURI);
 
-        const userId = req.user.id;
-
         const location = await prisma.location.create({
             data: {
                 latitude: coordinates[0],
                 longitude: coordinates[1],
-                name: coordinates[2] 
+                name: coordinates[2],
             }
         })
         await prisma.post.create({
             data: {
-                userId: userId,
+                tripId: req.params.tripId,
                 locationId: location.id,
                 photo: cldRes.secure_url,
             },
@@ -43,16 +40,22 @@ router.post('/create', isAuthenticated, upload.single('photo'), async (req, res)
     }
 });
 
-router.get('/create', isAuthenticated, async (req, res) => {
+router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     try {
+        const trip = await prisma.trip.findUnique({
+            where:{
+                id: req.params.tripId
+            }
+        })
         res.render('postCreate', { 
+            trip: trip,
             title: 'Create a post', 
             mapBoxApiKey: process.env.MAPBOX_API_KEY,
             error: req.flash('error') 
         });
     } catch (e) {
         console.log(e);
-        res.json('ServEer error');
+        res.json('Server error');
     }
 });
 
@@ -60,12 +63,15 @@ router.get("/", isAuthenticated, async (req, res) => {
     const post = await prisma.post.findMany({
         include: {
             location: true,
-            user: true,
+            trip: {
+                include: {
+                    user: true
+                }
+            }
         }
     })
     console.log(post);
     res.render("posts", {post: post});
 });
-
 
 module.exports = router;
