@@ -41,7 +41,7 @@ router.get('/create', isAuthenticated, async (req, res) => {
     }
 });
 
-router.get('/social', async (req, res) => {
+router.get('/social', isAuthenticated, async (req, res) => {
     try {
         const trips = await prisma.trip.findMany({
             include:{
@@ -56,9 +56,9 @@ router.get('/social', async (req, res) => {
         console.log(e);
         res.json('Server error');
     }
-})
+});
 
-router.get('/:tripId', async (req, res) => {
+router.get('/:tripId', isAuthenticated, async (req, res) => {
     try {
         const trip = await prisma.trip.findUnique({
             where:{
@@ -72,9 +72,7 @@ router.get('/:tripId', async (req, res) => {
                 }
             }
         })
-        console.log(req.user.id);
-        const owner = req.user.id === trip.userId; // Suponiendo que el ID de usuario está almacenado en el campo 'userId' del viaje
-        console.log(req.user.id);
+        const owner = req.user.id === trip.userId; // Si el userId guardado en req.user (Express-session) es igual al creador del trip (trip.userId) --> true
         res.render('trip', { 
             trip: trip,
             owner: owner,
@@ -85,5 +83,6 @@ router.get('/:tripId', async (req, res) => {
         console.log(e);
         res.json('ServEer error');
     }
-})
+});
+
 module.exports = router;

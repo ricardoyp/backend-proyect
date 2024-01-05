@@ -74,4 +74,15 @@ router.get("/", isAuthenticated, async (req, res) => {
     res.render("posts", {post: post});
 });
 
+router.delete("/delete", isAuthenticated, async (req, res) => {
+    const tripId = req.body.tripId;
+
+    await prisma.post.delete({
+        where: {
+            id: req.body.postId,
+        }
+    })
+    res.redirect('/trip/social');
+})
+
 module.exports = router;

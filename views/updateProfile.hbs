@@ -1,3 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        form {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input,
+        button {
+            margin-top: 5px;
+        }
+
+        #imagePreviewContainer {
+            margin-top: 10px;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            display: none;
+        }
+
+        #effectButtons {
+            margin-top: 10px;
+        }
+
+        button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
 <form action="/user/update?_method=PUT" method="POST" enctype="multipart/form-data">
     <label for="username">
         Username:
@@ -9,7 +53,61 @@
     </label>
     <label for="photo">
         Photo:
-        <input type="file" name="photo" value={{user.photo}}>
+        <input type="file" name="photo" onchange="previewImage()" value={{user.photo}}>
     </label>
+    <div id="imagePreviewContainer">
+        <img id="imagePreview" alt="Image Preview">
+    </div>
+    <div id="effectButtons">
+        <button onclick="applyFilter('blur')">Blur</button>
+        <button onclick="applyFilter('brightness')">Brightness</button>
+        <button onclick="applyFilter('contrast')">Contrast</button>
+    </div>
     <input type="submit">
 </form>
+
+<script>
+    function previewImage() {
+        const input = document.querySelector('input[type="file"]');
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('imagePreviewContainer');
+
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                container.style.display = 'block';
+                preview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            container.style.display = 'none';
+            preview.style.display = 'none';
+        }
+    }
+
+    function applyFilter(filter) {
+        const preview = document.getElementById('imagePreview');
+
+        switch (filter) {
+            case 'blur':
+                preview.style.filter = 'blur(4px)';
+                break;
+            case 'brightness':
+                preview.style.filter = 'brightness(250%)';
+                break;
+            case 'contrast':
+                preview.style.filter = 'contrast(180%)';
+                break;
+            default:
+                preview.style.filter = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
