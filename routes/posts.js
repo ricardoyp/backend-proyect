@@ -19,6 +19,8 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
 
         const cldRes = await handleUpload(dataURI);
 
+        const tripId = req.params.tripId;
+
         const location = await prisma.location.create({
             data: {
                 latitude: coordinates[0],
@@ -33,7 +35,7 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
                 photo: cldRes.secure_url,
             },
         });
-        res.redirect('/posts');
+        res.redirect(`/trip/${tripId}`);
     } catch (e) {
         console.log(e);
         res.json('Server Error');
@@ -82,7 +84,7 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
             id: req.body.postId,
         }
     })
-    res.redirect('/trip/social');
+    res.redirect(`/trip/${tripId}`);
 })
 
 module.exports = router;

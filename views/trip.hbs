@@ -75,13 +75,17 @@
         </div>
         <div class="derTrip">
             {{#if owner}}
+            <button>
                 <a href="/posts/create/{{trip.id}}">Crear Post</a>
+            </button>
             {{/if}}
             <div>
                 {{#if trip.post}}
                     <h2>Posts</h2>
-                    {{#each trip.post as |post|}}
+                    1 owner: {{owner}}
+                    {{#each trip.post as |post |}}
                         <div class="postBox">
+                            2 owner: {{../owner}}  
                             {{#if post.location}}
                                 <p>{{ post.location.name }}</p>
                             {{/if}}
@@ -89,10 +93,10 @@
                                 <img src="{{post.photo}}" alt="imagen-de-publicacion"
                                 style="width: 200px; height:200px; border-radius: 10px">
                             {{/if}}
-                            {{#if owner}}
+                            {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
                                 <form action="/posts/delete?_method=DELETE" method="POST">
                                     <input type="hidden" name="postId" value="{{post.id}}">
-                                    <input type="hidden" name="tripId" value="{{trip.id}}">
+                                    <input type="hidden" name="tripId" value="{{../trip.id}}">
                                     <button type="submit">Eliminar</button>
                                 </form>
                             {{/if}}
