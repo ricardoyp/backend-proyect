@@ -82,10 +82,8 @@
             <div>
                 {{#if trip.post}}
                     <h2>Posts</h2>
-                    1 owner: {{owner}}
                     {{#each trip.post as |post |}}
                         <div class="postBox">
-                            2 owner: {{../owner}}  
                             {{#if post.location}}
                                 <p>{{ post.location.name }}</p>
                             {{/if}}
@@ -104,6 +102,12 @@
                     {{/each}}
                 {{else}}
                 <p>No hay posts disponibles para este viaje.</p>
+                {{/if}}
+                {{#if owner}}
+                    <form action="/trip/delete?_method=DELETE" method="POST">
+                        <input type="hidden" name="tripId" value="{{trip.id}}">
+                        <button type="submit">ELIMINAR VIAJE</button>
+                    </form>
                 {{/if}}
             </div>
         </div>

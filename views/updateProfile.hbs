@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,15 +52,10 @@
     <label for="photo">
         Photo:
         <input type="file" name="photo" onchange="previewImage()" value={{user.photo}}>
+        <div id="imagePreviewContainer">
+            <img id="imagePreview" alt="Image Preview">
+        </div>
     </label>
-    <div id="imagePreviewContainer">
-        <img id="imagePreview" alt="Image Preview">
-    </div>
-    <div id="effectButtons">
-        <button onclick="applyFilter('blur')">Blur</button>
-        <button onclick="applyFilter('brightness')">Brightness</button>
-        <button onclick="applyFilter('contrast')">Contrast</button>
-    </div>
     <input type="submit">
 </form>
 
@@ -89,25 +82,7 @@
             preview.style.display = 'none';
         }
     }
-
-    function applyFilter(filter) {
-        const preview = document.getElementById('imagePreview');
-
-        switch (filter) {
-            case 'blur':
-                preview.style.filter = 'blur(4px)';
-                break;
-            case 'brightness':
-                preview.style.filter = 'brightness(250%)';
-                break;
-            case 'contrast':
-                preview.style.filter = 'contrast(180%)';
-                break;
-            default:
-                preview.style.filter = 'none';
-        }
-    }
 </script>
 
 </body>
-</html>
+

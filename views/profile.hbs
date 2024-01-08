@@ -1,4 +1,5 @@
 <style>
+
     .profile {
         display: flex;
         height: 25vh;
@@ -10,12 +11,12 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-
     }
 
     .izq img {
-        border-radius: 50%;
         overflow: hidden;
+        border-radius: 20%;
+        
     }
 
     .der {
@@ -35,16 +36,16 @@
         <p>username: {{user.username}}</p>
         <p>email: {{user.email}}</p>
         <p>trips: {{trips.length}}</p> 
+        <a href="/user/update">Update profile</a>
     </div>
 </div>
-    <a href="/user/update">Update profile</a>
 
 {{#if trips}}
 <ul>
     {{#each trips}}
     <a href="/trip/{{this.id}}">
         <li>
-            <p>NAME: {{this.name}}</p>
+            <p>{{this.name}}</p>
         </li>
     </a>
     {{/each}}

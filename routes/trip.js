@@ -85,4 +85,14 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
+router.delete("/delete", isAuthenticated, async (req, res) => {
+
+    await prisma.trip.delete({
+        where: {
+            id: req.body.tripId,
+        }
+    })
+    res.redirect(`/user`);
+})
+
 module.exports = router;

@@ -27,7 +27,8 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
                 longitude: coordinates[1],
                 name: coordinates[2],
             }
-        })
+        });
+
         await prisma.post.create({
             data: {
                 tripId: req.params.tripId,
