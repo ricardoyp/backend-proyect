@@ -1,39 +1,43 @@
-<style>
-    .tripsContainer {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        padding: 20px;
-        background-color: #f2f2f2;
-    }
-    .tripsContainer a{
-        text-decoration: none;
-    }
+<head>
+    <style>
+        .tripsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        .tripsContainer a{
+            text-decoration: none;
+        }
 
-    .tripBox {
-        width: 200px;
-        margin: 10px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-</style>
+        .tripBox {
+            width: 200px;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
 
-<div class="tripsContainer">
+<body>
+    {{> nav}}
+    <div class="tripsContainer">
     {{#each trips}}
-    <a href="/trip/{{this.id}}">
-        <div class="tripBox">
-            <p>{{user.username}}</p>
-            <h1>{{this.name}}</h1>
-        </div>
-    </a>
-        
+        <a href="/trip/{{this.id}}">
+            <div class="tripBox">
+                <p>{{user.username}}</p>
+                <h1>{{this.name}}</h1>
+            </div>
+        </a>
     {{/each}}
 
     {{#each error}}
         {{this}}
     {{/each}}
-</div>
+    </div>
+</body>
 

@@ -1,4 +1,8 @@
-<style>
+<head>
+    <style>
+    a {
+        text-decoration: none;
+    }
 
     .profile {
         display: flex;
@@ -26,30 +30,38 @@
     }
     
 </style>
+</head>
 
-<h1>Profile page</h1>
-<div class="profile">
-    <div class="izq">
-        <img src={{user.photo}} alt="user-image">
+<body>
+    {{> nav}}
+    <h1>Profile</h1>
+    <div class="profile">
+        <div class="izq">
+            <img src={{user.photo}} alt="user-image">
+        </div>
+        <div class="der">
+            <p>username: {{user.username}}</p>
+            <p>email: {{user.email}}</p>
+            <p>trips: {{trips.length}}</p> 
+            <a href="/user/update">Update profile</a>
+        </div>
     </div>
-    <div class="der">
-        <p>username: {{user.username}}</p>
-        <p>email: {{user.email}}</p>
-        <p>trips: {{trips.length}}</p> 
-        <a href="/user/update">Update profile</a>
-    </div>
-</div>
+    <button>
+        <a href="/trip/create">CREATE TRIP</a>
+    </button>
+    
+    {{#if trips}}
+    <ul>
+        {{#each trips}}
+        <a href="/trip/{{this.id}}">
+            <li>
+                <p>{{this.name}}</p>
+            </li>
+        </a>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>No Trips</p>
+    {{/if}}
+</body>
 
-{{#if trips}}
-<ul>
-    {{#each trips}}
-    <a href="/trip/{{this.id}}">
-        <li>
-            <p>{{this.name}}</p>
-        </li>
-    </a>
-    {{/each}}
-</ul>
-{{else}}
-<p>No Trips</p>
-{{/if}}

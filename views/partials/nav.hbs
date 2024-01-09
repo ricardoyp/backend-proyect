@@ -1,23 +1,25 @@
 <style>
-            nav {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            height: 30px;
-            width: 100%;
-            top: 0;
+    nav {
+        background-color: black;
+        padding: 25px;
+        display: flex;
+        justify-content: space-between;
+    }
 
-        }
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-right: 15px; /* Ajusta el valor según tus preferencias para separar los enlaces */
+    }
 
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 15px;
-        }
+    nav a:last-child {
+        margin-right: 0;
+        margin-left: auto;
+    }
 </style>
 
 <nav>
-    <a href="/trip/social">Homepage</a>
-    <a href="/user">Profile</a>
+    <a href="/trip/social">HOME</a>
+    <a href="/user">PROFILE</a>
     <a href="/auth/logout">LogOut</a>
 </nav>

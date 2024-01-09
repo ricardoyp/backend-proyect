@@ -13,7 +13,6 @@ router.post('/create', isAuthenticated, async (req, res) => {
     try {
         const nameTrip = req.body.nameTrip;
 
-        
         await prisma.trip.create({
             data: {
                 name: nameTrip,
@@ -86,13 +85,42 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
 });
 
 router.delete("/delete", isAuthenticated, async (req, res) => {
+    try {
+        const tripId = req.body.tripId;   //RECOGE EL ID DEL VIAJE QUE SE VA A ELIMINAR
 
-    await prisma.trip.delete({
-        where: {
-            id: req.body.tripId,
-        }
-    })
-    res.redirect(`/user`);
+        const postsToDelete = await prisma.post.findMany({   //BUSCA TODOS LOS POSTS DE ESE VIAJE
+            where: {
+                tripId: tripId
+            }
+        });
+
+        postsToDelete.forEach(async (post) => {
+            await prisma.location.delete({
+                where: {
+                    postId: post.id
+                }
+            });
+        
+            await prisma.post.delete({
+                where: {
+                    id: post.id
+                }
+            });
+        });
+
+        // Eliminar el viaje
+        await prisma.trip.delete({
+            where: {
+                id: tripId
+            }
+        });
+
+        res.redirect(`/user`);
+    } catch (e) {
+        console.log(e);
+        res.json('ServEer error');
+    }
+
 })
 
 module.exports = router;

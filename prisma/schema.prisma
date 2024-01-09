@@ -31,13 +31,12 @@ model Trip {
 
 model Post {
   id                String    @id @default(uuid())
-  tripId            String
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
-  locationId        String
   photo             String?
-  location          Location  @relation(fields: [locationId], references: [id])
+  tripId            String
   trip              Trip      @relation(fields: [tripId], references: [id])
+  location          Location?
 }
 
 model Location {
@@ -45,5 +44,6 @@ model Location {
   name        String?
   latitude    String
   longitude   String
-  posts       Post[]
+  postId      String    @unique
+  post        Post      @relation(fields: [postId], references: [id])
 }
