@@ -80,6 +80,10 @@
             <button>
                 <a href="/posts/create/{{trip.id}}">Crear Post</a>
             </button>
+            {{else}}
+                <a href="/user/{{trip.userId}}">
+                    <h3>{{trip.user.username}}</h3>
+                </a>
             {{/if}}
             <div>
                 {{#if trip.post}}

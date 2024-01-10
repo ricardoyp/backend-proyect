@@ -10,7 +10,7 @@ router.get("/", isAuthenticated, async (req, res) => {
     const userId = req.user.id;
     const trips = await prisma.trip.findMany({
         where: {
-            userId,
+            userId: userId,
         },
         include: {
             post: {
@@ -20,7 +20,42 @@ router.get("/", isAuthenticated, async (req, res) => {
             }
         }
     })
-    res.render("profile", { user: req.user, trips: trips});
+    const owner = true;
+    res.render("profile", { 
+        user: req.user,
+        trips: trips,
+        owner: owner
+    });
+});
+
+router.get("/:userId", isAuthenticated, async (req, res) => {
+
+    const user = await prisma.user.findUnique({  //RECOGE EL USUARIO CON EL ID DEL URL
+        where: {
+            id: req.params.userId,
+        }
+    })
+
+    const trips = await prisma.trip.findMany({   //RECOGE SUS VIAJES
+        where: {
+            userId: req.params.userId,
+        },
+        include: {
+            post: {
+                include: {
+                    location: true
+                }
+            }
+        }
+    })
+
+    const owner = req.user.id === req.params.userId; // Si el userId guardado en req.user (Express-session) es igual al usuario de la url (req.params.userId) --> true
+
+    res.render("profile", {
+        user: user,
+        trips: trips,
+        owner: owner,
+    });
 });
 
 router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) => {

@@ -43,12 +43,17 @@
             <p>username: {{user.username}}</p>
             <p>email: {{user.email}}</p>
             <p>trips: {{trips.length}}</p> 
-            <a href="/user/update">Update profile</a>
+            {{#if owner}}
+                <a href="/user/update">Update profile</a>
+            {{/if}}
         </div>
     </div>
-    <button>
-        <a href="/trip/create">CREATE TRIP</a>
-    </button>
+    {{#if owner}}
+        <button>
+            <a href="/trip/create">CREATE TRIP</a>
+        </button>
+    {{/if}}
+    
     
     {{#if trips}}
     <ul>
