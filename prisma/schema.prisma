@@ -19,6 +19,7 @@ model User {
   updatedAt   DateTime   @updatedAt
   photo       String?
   trips       Trip[]
+  comments    Comment[]
 }
 
 model Trip {
@@ -37,6 +38,7 @@ model Post {
   tripId            String
   trip              Trip      @relation(fields: [tripId], references: [id])
   location          Location?
+  comments          Comment[]
 }
 
 model Location {
@@ -47,3 +49,12 @@ model Location {
   postId      String    @unique
   post        Post      @relation(fields: [postId], references: [id])
 }
+
+model Comment {
+  id          String    @id @default(uuid())
+  userId      String    
+  postId      String    
+  text        String
+  post        Post      @relation(fields: [postId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+} 

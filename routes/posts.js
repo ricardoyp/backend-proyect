@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); //PARA CARGAR LAS VARIABLES DEL ARCHIVO .env
 dotenv.config()
 
 const prisma = require("../prisma");

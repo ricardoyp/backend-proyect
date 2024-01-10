@@ -21,8 +21,8 @@
         }
 
         #map {
-            height: 100%;
-            width: 100%;
+            height: 75%;
+            width: 75%;
             margin-top: 0px;
             border: 10px;
             border-color: black;
@@ -76,7 +76,8 @@
             </script>
         </div>
         <div class="derTrip">
-            {{#if owner}}
+            {{!-- SI ES PROPIETARIO --> MUESTRA CREAR POST , SI NO ES ENLACE CON NOMBRE DE PERFIL DEL PROPIETARIO --}}
+            {{#if owner}}  
             <button>
                 <a href="/posts/create/{{trip.id}}">Crear Post</a>
             </button>
@@ -85,24 +86,41 @@
                     <h3>{{trip.user.username}}</h3>
                 </a>
             {{/if}}
+
             <div>
                 {{#if trip.post}}
                     <h2>Posts</h2>
-                    {{#each trip.post as |post |}}
+                    {{!-- TODOS LOS POSTS --}}
+                    {{#each trip.post as |post|}}
                         <div class="postBox">
-                            {{#if post.location}}
+                        {{!-- LOCALIZACION --}}
+                            {{#if post.location}}   
                                 <p>{{ post.location.name }}</p>
                             {{/if}}
-                            {{#if post.photo}}
+                        {{!-- FOTO --}}
+                            {{#if post.photo}}      
                                 <img src="{{post.photo}}" alt="imagen-de-publicacion"
                                 style="width: 200px; height:200px; border-radius: 10px">
                             {{/if}}
+                        {{!-- COMENTARIOS --}}
+                            {{#each post.comments as |comment|}}    
+                                <p>{{comment.user.username}} :{{comment.text}}</p>
+                            {{/each}}
+                        {{!-- FORMULARIO PARA COMENTAR --}}
+                            <form action="/comments/post" method="POST">
+                                <input type="text" name="comment">
+                                <input type="hidden" name="postId" value="{{post.id}}">
+                                <input type="hidden" name="tripId" value="{{../trip.id}}">
+                                <button type="submit">Comentar</button>
+                            </form>
+                        {{!-- FORMULARIO PARA ELIMINAR --}}
                             {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
                                 <form action="/posts/delete?_method=DELETE" method="POST">
                                     <input type="hidden" name="postId" value="{{post.id}}">
                                     <input type="hidden" name="tripId" value="{{../trip.id}}">
                                     <button type="submit">Eliminar</button>
                                 </form>
+                                
                             {{/if}}
                         </div>
                     {{/each}}
