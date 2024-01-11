@@ -68,7 +68,12 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
                 post: {
                     include: {
                         location: true,
-                        comments: true
+                        comments: {
+                            include: {
+                                user: true,
+                                post: true,
+                            }
+                        }
                     }
                 }
             }

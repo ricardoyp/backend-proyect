@@ -2,138 +2,167 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
     <style>
         body {
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
 
         .tripView {
             display: flex;
-            height: 100vh;
         }
 
-        .izqTrip,
-        .derTrip {
-            flex-direction: column;
+        .izqTrip {
             flex: 1;
-            padding: 0px;
-            box-sizing: border-box;
-            overflow-y: auto;
+            height: 100vh;
+            overflow: hidden;
+            /* Para evitar el desplazamiento vertical en esta parte */
+        }
+
+        .mapBox {
+            height: 100%;
         }
 
         #map {
-            height: 75%;
-            width: 75%;
-            margin-top: 0px;
-            border: 10px;
-            border-color: black;
+            width: 100%;
+            height: 100%;
+        }
+
+        .derTrip {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            /* Hace que haya un desplazamiento vertical si es necesario */
+            padding: 20px;
+            /* Ajusta según sea necesario */
+            box-sizing: border-box;
         }
 
         .postBox {
-            width: 50%;
-            margin: 10px;
-            padding: 15px;
-            border: 5px solid #000000;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            /* Ajusta según sea necesario */
+            border: 1px solid #ccc;
+            /* Añade un borde para separar los postBox */
+            padding: 10px;
+            /* Ajusta según sea necesario */
+        }
+
+        .comments {
+            /* Estilos para los comentarios dentro de cada postBox */
         }
     </style>
 </head>
 
 <body>
-    {{>nav}}
+    <header>
+        {{>nav}}
+    </header>
     <div class="tripView">
         <div class="izqTrip">
-            <div id="map"></div>
+            <div class="mapBox">
+                <div id="map"></div>
+            </div>
             <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
             <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                mapboxgl.accessToken = '{{mapBoxApiKey}}';
-                var map = new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/streets-v11',
-                    zoom: 5,
-                });
-                var coordinates = []
-                {{#each trip.post as |post|}}
-                    {{#if post.location}}
-                        // Verifica si hay coordenadas
-                        var latitude = {{post.location.latitude}};
-                        var longitude = {{post.location.longitude}};
-                        coordinates.push([latitude, longitude]);
-                        // Crea un marcador en el mapa con las coordenadas
-                        new mapboxgl.Marker()
-                            .setLngLat([latitude, longitude])
-                            .addTo(map);
-                    {{/if}}
-                {{/each}}
-                var bounds = new mapboxgl.LngLatBounds();
-                coordinates.forEach(function (marker) {
-                    bounds.extend(marker);
-                });
-                map.fitBounds(bounds, { padding: 100 });
-            });
+                document.addEventListener('DOMContentLoaded', function () {
+                    mapboxgl.accessToken = '{{mapBoxApiKey}}';
+                    var map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v11',
+                        zoom: 5,
+                    });
+                    var coordinates = []
+                    { { #each trip.post as | post |} }
+                    { { #if post.location } }
+                    // Verifica si hay coordenadas
+                    var latitude = {{ post.location.latitude }
+                };
+                var longitude = {{ post.location.longitude }};
+                coordinates.push([latitude, longitude]);
+                // Crea un marcador en el mapa con las coordenadas
+                new mapboxgl.Marker()
+                    .setLngLat([latitude, longitude])
+                    .addTo(map);
+                {
+                    {
+                        /if}}
+                        {
+                            {
+                                /each}}
+                                var bounds = new mapboxgl.LngLatBounds();
+                                coordinates.forEach(function (marker) {
+                                    bounds.extend(marker);
+                                });
+                                map.fitBounds(bounds, { padding: 100 });
+                            });
             </script>
         </div>
         <div class="derTrip">
             {{!-- SI ES PROPIETARIO --> MUESTRA CREAR POST , SI NO ES ENLACE CON NOMBRE DE PERFIL DEL PROPIETARIO --}}
-            {{#if owner}}  
+            {{#if owner}}
             <button>
                 <a href="/posts/create/{{trip.id}}">Crear Post</a>
             </button>
             {{else}}
-                <a href="/user/{{trip.userId}}">
-                    <h3>{{trip.user.username}}</h3>
-                </a>
+            <a href="/user/{{trip.userId}}">
+                <h3>{{trip.user.username}}</h3>
+            </a>
             {{/if}}
 
-            <div>
-                {{#if trip.post}}
-                    <h2>Posts</h2>
-                    {{!-- TODOS LOS POSTS --}}
-                    {{#each trip.post as |post|}}
-                        <div class="postBox">
-                        {{!-- LOCALIZACION --}}
-                            {{#if post.location}}   
-                                <p>{{ post.location.name }}</p>
-                            {{/if}}
-                        {{!-- FOTO --}}
-                            {{#if post.photo}}      
-                                <img src="{{post.photo}}" alt="imagen-de-publicacion"
-                                style="width: 200px; height:200px; border-radius: 10px">
-                            {{/if}}
-                        {{!-- COMENTARIOS --}}
-                            {{#each post.comments as |comment|}}    
-                                <p>{{comment.user.username}} :{{comment.text}}</p>
-                            {{/each}}
-                        {{!-- FORMULARIO PARA COMENTAR --}}
-                            <form action="/comments/post" method="POST">
-                                <input type="text" name="comment">
-                                <input type="hidden" name="postId" value="{{post.id}}">
-                                <input type="hidden" name="tripId" value="{{../trip.id}}">
-                                <button type="submit">Comentar</button>
-                            </form>
-                        {{!-- FORMULARIO PARA ELIMINAR --}}
-                            {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
-                                <form action="/posts/delete?_method=DELETE" method="POST">
-                                    <input type="hidden" name="postId" value="{{post.id}}">
-                                    <input type="hidden" name="tripId" value="{{../trip.id}}">
-                                    <button type="submit">Eliminar</button>
-                                </form>
-                                
-                            {{/if}}
-                        </div>
-                    {{/each}}
-                {{else}}
-                <p>No hay posts disponibles para este viaje.</p>
-                {{/if}}
-                {{#if owner}}
-                    <form action="/trip/delete?_method=DELETE" method="POST">
-                        <input type="hidden" name="tripId" value="{{trip.id}}">
-                        <button type="submit">ELIMINAR VIAJE</button>
+            {{#if trip.post}}
+            <h2>POSTS</h2>
+            <div class="allPosts">
+
+                {{!-- TODOS LOS POSTS --}}
+                {{#each trip.post as |post|}}
+                <div class="postBox">
+                    {{!-- LOCALIZACION --}}
+                    {{#if post.location}}
+                    <p>{{ post.location.name }}</p>
+                    {{/if}}
+                    {{!-- FOTO --}}
+                    {{#if post.photo}}
+                    <img src="{{post.photo}}" alt="imagen-de-publicacion"
+                        style="width: 300px; height:300px; border-radius: 10px">
+                    {{/if}}
+                    {{!-- COMENTARIOS --}}
+                    <div class="comments">
+                        {{#each post.comments as |comment|}}
+                        {{#if comment.user}}
+                        <p>{{comment.user.username}}: {{comment.text}}</p>
+                        {{!-- {{else}}
+                        <p>Usuario desconocido: {{comment.text}}</p> --}}
+                        {{/if}}
+                        {{/each}}
+                    </div>
+                    {{!-- FORMULARIO PARA COMENTAR --}}
+                    <form action="/comments/post" method="POST">
+                        <input type="text" name="comment">
+                        <input type="hidden" name="postId" value="{{post.id}}">
+                        <input type="hidden" name="tripId" value="{{../trip.id}}">
+                        <button type="submit">Comentar</button>
                     </form>
-                {{/if}}
+                    {{!-- FORMULARIO PARA ELIMINAR --}}
+                    {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
+                    <form action="/posts/delete?_method=DELETE" method="POST">
+                        <input type="hidden" name="postId" value="{{post.id}}">
+                        <input type="hidden" name="tripId" value="{{../trip.id}}">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                    {{/if}}
+                </div>
+                <br>
+                {{/each}}
             </div>
+            {{else}}
+            <p>No hay posts disponibles para este viaje.</p>
+            {{/if}}
+
+            {{#if owner}}
+            <form action="/trip/delete?_method=DELETE" method="POST">
+                <input type="hidden" name="tripId" value="{{trip.id}}">
+                <button type="submit">ELIMINAR VIAJE</button>
+            </form>
+            {{/if}}
         </div>
     </div>
 </body>

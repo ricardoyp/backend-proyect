@@ -22,7 +22,7 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
 
         const post = await prisma.post.create({    //CREA EL POST 
             data: {
-                tripId: req.params.tripId,
+                tripId: tripId,
                 photo: cldRes.secure_url,
             },
         });
