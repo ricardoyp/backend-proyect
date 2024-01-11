@@ -107,7 +107,11 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
                     postId: post.id
                 }
             });
-        
+            await prisma.comment.deleteMany({
+                where: {
+                    postId: post.id
+                }
+            })
             await prisma.post.delete({
                 where: {
                     id: post.id
@@ -125,7 +129,7 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
         res.redirect(`/user`);
     } catch (e) {
         console.log(e);
-        res.json('ServEer error');
+        res.json('Server error');
     }
 
 })

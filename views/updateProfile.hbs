@@ -4,8 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         form {
-            max-width: 400px;
+            max-width: 600px;
             margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
 
         label {
@@ -13,9 +17,13 @@
             margin-bottom: 10px;
         }
 
-        input,
-        button {
-            margin-top: 5px;
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         #imagePreviewContainer {
@@ -29,13 +37,6 @@
             display: none;
         }
 
-        #effectButtons {
-            margin-top: 10px;
-        }
-
-        button {
-            margin-right: 10px;
-        }
     </style>
 </head>
 <body>

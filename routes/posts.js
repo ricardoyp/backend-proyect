@@ -89,23 +89,34 @@ router.get("/", isAuthenticated, async (req, res) => {
 });
 
 router.delete("/delete", isAuthenticated, async (req, res) => {
+    try {
+        const tripId = req.body.tripId; //RECOJO DEL BODY EL ID DEL VIAJE PARA VOLVER CUANDO SE ELIMINE EL POST
+        const postId = req.body.postId; 
 
-    const tripId = req.body.tripId; //RECOJO DEL BODY EL ID DEL VIAJE PARA VOLVER CUANDO SE ELIMINE EL POST
-    const postId = req.body.postId; 
+        await prisma.location.delete({
+            where: {
+                postId: postId
+            }
+        });
 
-    await prisma.location.delete({
-        where: {
-            postId: postId
-        }
-    })
+        await prisma.comment.deleteMany({
+            where: {
+                postId: postId
+            }
+        });
 
-    await prisma.post.delete({
-        where: {
-            id: postId
-        }
-    })
+        await prisma.post.delete({
+            where: {
+                id: postId
+            }
+        })
 
-    res.redirect(`/trip/${tripId}`);
+        res.redirect(`/trip/${tripId}`);
+    } catch (e) {
+        console.log(e);
+        res.json('Server Error');
+    }
+
 })
 
 module.exports = router;

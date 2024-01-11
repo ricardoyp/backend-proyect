@@ -23,18 +23,33 @@
     <form action='/posts/create/{{trip.id}}' method='post' enctype="multipart/form-data">
         <label for="photo">
             Photo:
-            <input type="file" name="photo" id="photoInput" onchange="previewImage()" accept="image/*">
+            <input type="file" name="photo" id="photoInput" onchange="previewImage()" accept="image/*" required>
             <img id="photoPreview" src="#" alt="Preview" style="display:none; max-width: 300px; max-height: 200px;">
         </label><br>
         <label>
             Ubicacion:
             <div id='geocoder' class='geocoder'></div>
             <input type="hidden" name="location" id="location" value="">
+            <span id="locationError" style="color: red; display: none;">Por favor, seleccione una ubicación válida.</span>
         </label><br>
         <input type="submit">
     </form>
 
     <script>
+        function validateForm() {
+            // Obtener el valor de la ubicación
+            var locationInput = document.getElementById('location').value.trim();
+
+            // Validar que se haya seleccionado una ubicación
+            if (locationInput === '') {
+                document.getElementById('locationError').style.display = 'block';
+                return false;
+            }
+
+            // Si todo está bien, puedes enviar el formulario
+            return true;
+        }
+
         mapboxgl.accessToken = '{{mapBoxApiKey}}';
 
         var geocoder = new MapboxGeocoder({

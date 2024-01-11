@@ -1,8 +1,44 @@
-<body>
+<head>
+    <style>
+        form {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
 
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h3 {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
     <form action='/trip/create' method='post'>
         <label for="nameTrip">
-            Nombre del viaje:
+            <h3>
+                NAME:
+            </h3>
             <input type="text" name="nameTrip" placeholder="nameTrip">
         </label>
         <input type="submit">
