@@ -6,7 +6,7 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
-router.get('/update', (req, res) => {
+router.get('/update', isAuthenticated, (req, res) => {
     res.render('updateProfile', {user: req.user})
 })
 
@@ -85,7 +85,5 @@ router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) 
         res.redirect('/user');
     }
 });
-
-
 
 module.exports = router;
