@@ -28,7 +28,7 @@
             height: 100%;
         }
 
-        #map {
+        #map{
             width: 100%;
             height: 100%;
         }
@@ -42,17 +42,19 @@
         }
 
         .photoContent {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        height: 350px;
-        width: 350px;
-        border-radius: 5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            height: 350px;
+            width: 350px;
+            border-radius: 5%;
         }
 
         .photoContent img {
-        overflow: hidden;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .allPosts {
@@ -146,7 +148,7 @@
                 var map = new mapboxgl.Map({
                     container: 'map',
                     style: 'mapbox://styles/mapbox/navigation-night-v1',
-                    zoom: 5,
+                    zoom: 3,
                 });
                 var coordinates = []
                 {{#each trip.post as |post|}}
@@ -166,7 +168,7 @@
                 coordinates.forEach(function (marker) {
                     bounds.extend(marker);
                 });
-                map.fitBounds(bounds, { padding: 100 });
+                map.fitBounds(bounds, { padding: 300 });
             });
             </script>
         </div>
@@ -196,13 +198,14 @@
                         <div class="postBox">
                         {{!-- LOCALIZACION --}}
                             {{#if post.location}}   
-                                <h3>{{ post.location.name }}</h3>
+                                <h1>{{ post.location.name }}</h1>
                             {{/if}}
                         {{!-- FOTO --}}
                             {{#if post.photo}}
                             <div class="photoContent">
                                 <img src="{{post.photo}}" alt="imagen-de-publicacion">
-                            </div>    <br>  
+                            </div> 
+                            <p>{{formatDate post.createdAt}}</p>
                             {{/if}}
                         {{!-- COMENTARIOS --}}
                             <div class="comments">
@@ -219,14 +222,14 @@
                                 <input type="text" name="comment">
                                 <input type="hidden" name="postId" value="{{post.id}}">
                                 <input type="hidden" name="tripId" value="{{../trip.id}}">
-                                <button id = "comment" type="submit">Comentar</button>
+                                <button id = "comment" type="submit">COMENTAR</button>
                             </form>
                         {{!-- FORMULARIO PARA ELIMINAR --}}
                             {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
                                 <form action="/posts/delete?_method=DELETE" method="POST">
                                     <input type="hidden" name="postId" value="{{post.id}}">
                                     <input type="hidden" name="tripId" value="{{../trip.id}}">
-                                    <button id="delete" type="submit">Eliminar</button>
+                                    <button id="delete" type="submit">ELIMINAR</button>
                                 </form>
                             {{/if}}
                         </div>
@@ -235,7 +238,6 @@
                 {{else}}
                 <p>No hay posts disponibles para este viaje.</p>
                 {{/if}}
-
                 {{#if owner}}
                     <form action="/trip/delete?_method=DELETE" method="POST">
                         <input type="hidden" name="tripId" value="{{trip.id}}">

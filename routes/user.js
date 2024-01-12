@@ -23,12 +23,14 @@ router.get("/", isAuthenticated, async (req, res) => {
                 }
             }
         }
-    })
+    });
+
     const owner = true;
+
     res.render("profile", { 
         user: req.user,
         trips: trips,
-        owner: owner
+        owner: owner,
     });
 });
 
@@ -85,5 +87,62 @@ router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) 
         res.redirect('/user');
     }
 });
+
+router.delete("/delete", isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.user.id;   // Recoge el ID del usuario que se va a eliminar
+
+        const tripsToDelete = await prisma.trip.findMany({   // Busca todos los viajes del usuario
+            where: {
+                userId: userId
+            }
+        });
+
+        for (const trip of tripsToDelete) {
+            const postsToDelete = await prisma.post.findMany({
+                where: {
+                    tripId: trip.id
+                }
+            });
+
+            for (const post of postsToDelete) {
+                await prisma.location.delete({
+                    where: {
+                        postId: post.id
+                    }
+                });
+                await prisma.comment.deleteMany({
+                    where: {
+                        postId: post.id
+                    }
+                });
+                await prisma.post.delete({
+                    where: {
+                        id: post.id
+                    }
+                });
+            }
+        }
+
+        // Elimina los viajes del usuario
+        await prisma.trip.deleteMany({
+            where: {
+                userId: userId
+            }
+        });
+
+        // Elimina al usuario
+        await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+
+        res.redirect(`/user`);
+    } catch (e) {
+        console.log(e);
+        res.json('Server error');
+    }
+})
 
 module.exports = router;

@@ -37,6 +37,14 @@
             display: none;
         }
 
+        #deleteButton{
+            background-color: #ff1919;
+            color: #ffffff;
+            padding: 5px;
+            border: 1px black solid;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -60,7 +68,24 @@
     <input type="submit">
 </form>
 
+<form id="deleteForm" action="/user/delete?_method=DELETE" method="POST">
+    <button type="button" id="deleteButton">Eliminar Usuario</button>
+</form>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteButton = document.getElementById('deleteButton');
+        var deleteForm = document.getElementById('deleteForm');
+
+        if (deleteButton && deleteForm) {
+            deleteButton.addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que quieres eliminar tu cuenta?')) {
+                deleteForm.submit();
+            }
+            });
+        }
+    });
+
     function previewImage() {
         const input = document.querySelector('input[type="file"]');
         const preview = document.getElementById('imagePreview');
