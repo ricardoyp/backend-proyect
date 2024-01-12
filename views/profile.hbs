@@ -17,19 +17,19 @@
         padding: 20px;
     }
 
-    .izq {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        height: 250px;
-        width: 250px;
-        border-radius: 20%;
-    }
+        .izq {
+            width: 250px;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 10%;
+            border: 2px solid black;
+        }
 
-    .izq img {
-        overflow: hidden;
-    }
+        .izq img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     .der {
         padding: 20px;
@@ -63,7 +63,7 @@
     {{> nav}}
     <div class="profile">
         <div class="izq">
-            <img src={{user.photo}} alt="user-image">
+            <img src={{user.photo}}>
         </div>
         <div class="der">
             <h1>username: {{user.username}}</h1>
