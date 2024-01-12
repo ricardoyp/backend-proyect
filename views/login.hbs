@@ -1,49 +1,59 @@
-<style>
-    form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 300px;
-    }
+<head>
+    <style>
+        body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 8px;
-    }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
 
-    input {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
 
-    button {
-        background-color: #4caf50;
-        color: #fff;
-        padding: 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-    }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
 
-    button:hover {
-        background-color: #45a049;
-    }
-</style>
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
 
-<form action="/auth/login" method="post">
-    <h2>Login</h2>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    {{#each error}}
-        {{this}}
-    {{/each}}
-    <button type="submit">Login</button>
-    <a href="/auth/register-page">Registrate Aqui</a>
-</form>
+<body>
+    <form action="/auth/login" method="post">
+        <h2>Login</h2>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        {{#each error}}
+            {{this}}
+        {{/each}}
+        <button type="submit">Login</button>
+        <a href="/auth/register-page">Registrate Aqui</a>
+    </form>
+</body>

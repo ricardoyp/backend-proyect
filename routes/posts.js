@@ -66,27 +66,27 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
-router.get("/", isAuthenticated, async (req, res) => {
-    //NO USADA DE MOMENTO
-    try{
-        const post = await prisma.post.findMany({   //MUESTRA TODOS LOS POSTS
-            include: {
-                location: true,
-                trip: {
-                    include: {
-                        user: true
-                    }
-                }
-            }
-        })
+// router.get("/", isAuthenticated, async (req, res) => {
+//     //NO USADA DE MOMENTO
+//     try{
+//         const post = await prisma.post.findMany({   //MUESTRA TODOS LOS POSTS
+//             include: {
+//                 location: true,
+//                 trip: {
+//                     include: {
+//                         user: true
+//                     }
+//                 }
+//             }
+//         })
 
-        res.render("posts", {post: post});
+//         res.render("posts", {post: post});
 
-    } catch (e) {
-        console.log(e);
-        res.json('Server error');
-    }
-});
+//     } catch (e) {
+//         console.log(e);
+//         res.json('Server error');
+//     }
+// });
 
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
