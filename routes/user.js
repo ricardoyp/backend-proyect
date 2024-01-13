@@ -57,6 +57,9 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
 
     const owner = req.user.id === req.params.userId; // Si el userId guardado en req.user (Express-session) es igual al usuario de la url (req.params.userId) --> true
 
+    if(req.params.userId === req.user.id){
+        res.redirect("/user")
+    }
     res.render("profile", {
         user: user,
         trips: trips,
