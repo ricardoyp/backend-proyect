@@ -160,6 +160,7 @@
                         // Crea un marcador en el mapa con las coordenadas
                         new mapboxgl.Marker()
                             .setLngLat([latitude, longitude])
+                            .setPopup(new mapboxgl.Popup().setHTML("<h3>{{post.location.name}}</p>"))
                             .addTo(map);
                     {{/if}}
                 {{/each}}
