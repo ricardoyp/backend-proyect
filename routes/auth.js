@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
 
 // Ruta de inicio de sesión, ejecuta la estrategia local de passport
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/user",
+    successRedirect: "/trip/social",
     failureRedirect: "/auth/login-page",
     failureFlash: true,
 })
