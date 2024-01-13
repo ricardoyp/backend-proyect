@@ -145,7 +145,7 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
             }
         });
 
-        postsToDelete.forEach(async (post) => {
+        for (const post of postsToDelete) {
             await prisma.location.delete({
                 where: {
                     postId: post.id
@@ -161,7 +161,7 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
                     id: post.id
                 }
             });
-        });
+        }
 
         // Eliminar el viaje
         await prisma.trip.delete({

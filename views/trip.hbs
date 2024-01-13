@@ -84,13 +84,24 @@
             border: 1px solid #ccc;
         }
 
-        button {
+        #create{
             background-color: #4caf50;
             color: #fff;
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
+            border: 2px black solid;
             cursor: pointer;
+        }
+
+        #edit{
+            background-color: #fbff00;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px black solid;
         }
 
         #comment{
@@ -127,6 +138,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .buttons{
+            display: flex;
+            gap: 20px;
         }
 
     </style>
@@ -177,16 +193,19 @@
             <div class="allPosts">
             {{!-- SI ES PROPIETARIO --> MUESTRA CREAR POST , SI NO ES ENLACE CON NOMBRE DE PERFIL DEL PROPIETARIO --}}
             {{#if owner}}  
-            <button>
-                <a href="/posts/create/{{trip.id}}">CREAR POST</a>
-            </button>
-            <button>
-                <a href="/trip/updateName/{{trip.id}}">CHANGE NAME</a>
-            </button>
+            <div class="buttons">
+                <button id="create">
+                    <a  href="/posts/create/{{trip.id}}">CREAR POST</a>
+                </button>
+                <button id="edit">
+                    <a href="/trip/updateName/{{trip.id}}">CHANGE NAME</a>
+                </button>
+            </div>
+            
             {{else}}
                 <div class="userContent">
                     <div class="photoUser">
-                        <img src={{trip.user.photo}} alt="user-image">
+                        <img src={{trip.user.photo}}>
                     </div>
                     <a href="/user/{{trip.userId}}">
                         <h1>@{{trip.user.username}}</h1>
@@ -240,7 +259,7 @@
                         <br>
                     {{/each}}
                 {{else}}
-                <p>No hay posts disponibles para este viaje.</p>
+                <p>No available posts.</p>
                 {{/if}}
                 {{#if owner}}
                     <form action="/trip/delete?_method=DELETE" method="POST">
