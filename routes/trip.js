@@ -13,7 +13,7 @@ router.post('/create', isAuthenticated, async (req, res) => {
     try {
         const nameTrip = req.body.nameTrip;
 
-        await prisma.trip.create({
+        const trip = await prisma.trip.create({
             data: {
                 name: nameTrip,
                 userId: req.user.id
@@ -47,8 +47,21 @@ router.get('/social', isAuthenticated, async (req, res) => {
                 user: true
             }
         });
+
+        const users = await prisma.user.findMany({
+            include: {
+                trips: true,
+            },
+            orderBy: {
+                trips: {
+                _count: 'desc',
+                },
+            },
+            take: 3,
+        });
         res.render('social', {
             trips: trips,
+            users: users,
             error: req.flash('error') 
             })
     } catch (e) {
