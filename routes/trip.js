@@ -104,6 +104,37 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
+router.get('/updateName/:tripId', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const trip = await prisma.trip.findUnique({
+            where: {
+                id: req.params.tripId
+            }
+        })
+        res.render('updateTripName', { 
+            trip: trip,
+            userId: userId,
+            error: req.flash('error') 
+        });
+    } catch (e) {
+        console.log(e);
+        res.json('Server error');
+    }
+});
+
+router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
+    const trip = await prisma.trip.update({
+        where: {
+            id: req.params.tripId,
+        },
+        data: {
+            name: req.body.nameTrip
+        },
+    });
+    res.redirect(`/trip/${trip.id}`);
+})
+
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId;   //RECOGE EL ID DEL VIAJE QUE SE VA A ELIMINAR
