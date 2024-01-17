@@ -6,10 +6,12 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
+// Muestra la view para actualizar
 router.get('/update', isAuthenticated, (req, res) => {
     res.render('updateProfile', {user: req.user})
 })
 
+// Muestra mi usuario
 router.get("/", isAuthenticated, async (req, res) => {
     const userId = req.user.id;
     const trips = await prisma.trip.findMany({
@@ -34,6 +36,7 @@ router.get("/", isAuthenticated, async (req, res) => {
     });
 });
 
+// Muestra un usuario
 router.get("/:userId", isAuthenticated, async (req, res) => {
 
     const user = await prisma.user.findUnique({  //RECOGE EL USUARIO CON EL ID DEL URL
@@ -67,6 +70,7 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
     });
 });
 
+// Actualiza un usuario
 router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -91,6 +95,7 @@ router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) 
     }
 });
 
+// Elimina un usuario
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const userId = req.user.id;   // Recoge el ID del usuario que se va a eliminar

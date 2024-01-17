@@ -9,6 +9,7 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
+// Crear post en un trip
 router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
         const coordinates = req.body.location.split(','); //SEPARA LA LOCALIZACION EN UN ARRAY CON LATITUDE Y LONGITUDE
@@ -44,6 +45,7 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
     }
 });
 
+// Muestra la pagina para crear post en un trip
 router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     try {
 
@@ -66,28 +68,7 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
-// router.get("/", isAuthenticated, async (req, res) => {
-//     //NO USADA DE MOMENTO
-//     try{
-//         const post = await prisma.post.findMany({   //MUESTRA TODOS LOS POSTS
-//             include: {
-//                 location: true,
-//                 trip: {
-//                     include: {
-//                         user: true
-//                     }
-//                 }
-//             }
-//         })
-
-//         res.render("posts", {post: post});
-
-//     } catch (e) {
-//         console.log(e);
-//         res.json('Server error');
-//     }
-// });
-
+// Elimina un post
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId; //RECOJO DEL BODY EL ID DEL VIAJE PARA VOLVER CUANDO SE ELIMINE EL POST

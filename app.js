@@ -34,7 +34,7 @@ app.use(passport.session());
 
 app.use(flash()); 
 app.use(express.static('public')); 
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'))                // Para poder usar metodos(PUT - DELETE) en formularios
 
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');

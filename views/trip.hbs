@@ -56,6 +56,12 @@
             height: 100%;
             object-fit: cover;
         }
+
+        .photoContent video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         
         .allPosts {
             display: flex;
@@ -224,12 +230,24 @@
                                 <h1>{{ post.location.name }}</h1>
                             {{/if}}
                         {{!-- FOTO --}}
-                            {{#if post.photo}}
-                            <div class="photoContent">
-                                <img src="{{post.photo}}" alt="imagen-de-publicacion">
-                            </div> 
-                            <p>{{formatDate post.createdAt}}</p>
+
+                        {{#if post.photo}}
+                            {{#if (endsWith post.photo '.mp4')}}
+                                <div class="photoContent">
+                                    <video controls width="300" height="200">
+                                        <source src="{{post.photo}}" type="video/mp4">
+                                    </video>
+                                </div>
+                                <p>{{formatDate post.createdAt}}</p>
+
+                            {{else}}
+                                <div class="photoContent">
+                                    <img src="{{post.photo}}">
+                                </div>
+                                <p>{{formatDate post.createdAt}}</p>
                             {{/if}}
+                        {{/if}}
+
                         {{!-- COMENTARIOS --}}
                             <div class="comments">
                                 {{#each post.comments as |comment|}}

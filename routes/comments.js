@@ -4,6 +4,7 @@ const router = express.Router();
 const prisma = require("../prisma");
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
+// Comentar en post
 router.post("/post", isAuthenticated, async (req, res) => {
     const tripId = req.body.tripId;
     

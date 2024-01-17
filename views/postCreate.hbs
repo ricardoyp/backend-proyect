@@ -23,7 +23,7 @@
     <form action='/posts/create/{{trip.id}}' method='post' enctype="multipart/form-data">
         <label for="photo">
             Photo:
-            <input type="file" name="photo" id="photoInput" onchange="previewImage()" accept="image/*" required>
+            <input type="file" name="photo" id="photoInput" onchange="previewImage()" accept="image/*, video/*" required>
             <img id="photoPreview" src="#" alt="Preview" style="display:none; max-width: 300px; max-height: 200px;">
         </label><br>
         <label>

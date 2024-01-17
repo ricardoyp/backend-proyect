@@ -9,6 +9,7 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
+// Crear trip
 router.post('/create', isAuthenticated, async (req, res) => {
     try {
         const nameTrip = req.body.nameTrip;
@@ -40,6 +41,7 @@ router.get('/create', isAuthenticated, async (req, res) => {
     }
 });
 
+// Muestra los trips
 router.get('/social', isAuthenticated, async (req, res) => {
     try {
         const trips = await prisma.trip.findMany({
@@ -70,6 +72,7 @@ router.get('/social', isAuthenticated, async (req, res) => {
     }
 });
 
+// Muestra un trip seleccionado
 router.get('/:tripId', isAuthenticated, async (req, res) => {
     try {
         const trip = await prisma.trip.findUnique({
@@ -104,6 +107,7 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
+// Cambiar nombre del trip
 router.get('/updateName/:tripId', isAuthenticated, async (req, res) => {
     try {
         const userId = req.user.id;
@@ -135,6 +139,7 @@ router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
     res.redirect(`/trip/${trip.id}`);
 })
 
+// Eliminar trip
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId;   //RECOGE EL ID DEL VIAJE QUE SE VA A ELIMINAR

@@ -34,14 +34,17 @@ router.post("/login", passport.authenticate("local", {
 })
 );
 
-router.get("/login-page", (req, res) => {
-    res.render("login", { error: req.flash("error") });
-});
-
+// Muestra register-page
 router.get("/register-page", (req, res) => {
     res.render("register", { error: req.flash("error") });
 });
 
+// Muestra login-page
+router.get("/login-page", (req, res) => {
+    res.render("login", { error: req.flash("error") });
+});
+
+// Logout
 router.get("/logout", (req, res) => {
     req.logout(function (err) {
         if (err) {
