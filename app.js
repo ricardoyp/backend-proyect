@@ -3,6 +3,9 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 const { create } = require('express-handlebars');
 const hbs = create({
   extname: 'hbs', 
@@ -43,6 +46,20 @@ app.set('views', './views');
 require('./config/passport'); 
 require('./config/cloudinary'); 
 require('./config/multer'); 
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "My API",
+      version: "1.0.0",
+      description: "WorldWander",
+    },
+  },
+  apis: ["./routes/*.js"], // paths to files containing Swagger annotations
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/", require("./routes"));
 
