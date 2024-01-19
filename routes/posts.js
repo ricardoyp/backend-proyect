@@ -11,7 +11,7 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
 /**
  * @swagger
  * tags:
- *   - name: Posts
+ *   - name: Post
  *     description: Posts Routes
  */
 
