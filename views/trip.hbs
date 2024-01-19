@@ -267,7 +267,7 @@
                             </form>
                         {{!-- FORMULARIO PARA ELIMINAR --}}
                             {{#if ../owner}} {{!--CORRECTA JERARQUIZACION PARA ACCEDER A VARIABLES DENTRO DE UN EACH AS --}}
-                                <form action="/posts/delete?_method=DELETE" method="POST">
+                                <form action="/posts/deletePost?_method=DELETE" method="POST">
                                     <input type="hidden" name="postId" value="{{post.id}}">
                                     <input type="hidden" name="tripId" value="{{../trip.id}}">
                                     <button id="delete" type="submit">ELIMINAR</button>
@@ -280,7 +280,7 @@
                 <p>No available posts.</p>
                 {{/if}}
                 {{#if owner}}
-                    <form action="/trip/delete?_method=DELETE" method="POST">
+                    <form action="/trip/deleteTrip?_method=DELETE" method="POST">
                         <input type="hidden" name="tripId" value="{{trip.id}}">
                         <button id="delete" type="submit">ELIMINAR VIAJE</button>
                     </form>

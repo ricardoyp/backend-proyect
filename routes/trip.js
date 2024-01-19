@@ -300,7 +300,7 @@ router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
 
 /**
  * @swagger
- * /delete:
+ * /deleteTrip:
  *   delete:
  *     summary: Deletes a trip and all associated posts and comments
  *     tags:
@@ -330,7 +330,7 @@ router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Server error
  */
-router.delete("/delete", isAuthenticated, async (req, res) => {
+router.delete("/deleteTrip", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId;   //RECOGE EL ID DEL VIAJE QUE SE VA A ELIMINAR
 

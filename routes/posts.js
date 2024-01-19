@@ -146,7 +146,7 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
 
 /**
  * @swagger
- * /delete:
+ * /deletePost:
  *   delete:
  *     summary: Deletes an existing post
  *     tags:
@@ -179,7 +179,7 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
  *       500:
  *         description: Server error
  */
-router.delete("/delete", isAuthenticated, async (req, res) => {
+router.delete("/deletePost", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId; //RECOJO DEL BODY EL ID DEL VIAJE PARA VOLVER CUANDO SE ELIMINE EL POST
         const postId = req.body.postId; 
