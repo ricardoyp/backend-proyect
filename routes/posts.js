@@ -11,7 +11,7 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
 /**
  * @swagger
  * tags:
- *   - name: Post
+ *   - name: Posts
  *     description: Posts Routes
  */
 
@@ -21,7 +21,7 @@ const isAuthenticated = require('..//middleware/isAuthenticated');
  *   post:
  *     summary: Creates a new post in a specific trip
  *     tags:
- *       - Post
+ *       - Posts
  *     security:
  *       - auth:
  *         - user
@@ -102,7 +102,7 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
  *   get:
  *     summary: Renders the post creation form for a specific trip
  *     tags:
- *       - Post
+ *       - Posts
  *     security:
  *       - auth:
  *         - user
@@ -150,7 +150,7 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
  *   delete:
  *     summary: Deletes an existing post
  *     tags:
- *       - Post
+ *       - Posts
  *     security:
  *       - auth:
  *         - user
