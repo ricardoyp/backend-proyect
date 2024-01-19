@@ -8,6 +8,12 @@ const prisma = require("../prisma");
 const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
+/**
+ * @swagger
+ * tags:
+ *   - name: Posts
+ *     description: Posts Routes
+ */
 
 /**
  * @swagger
@@ -109,8 +115,6 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
  *     responses:
  *       200:
  *         description: Post creation form rendered successfully
- *         schema:
- *           $ref: '#/definitions/TripPostCreationForm'
  *       401:
  *         description: Unauthorized access
  *       404:

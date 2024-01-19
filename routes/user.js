@@ -5,13 +5,53 @@ const prisma = require("../prisma");
 const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
+/**
+ * @swagger
+ * tags:
+ *   - name: User
+ *     description: User Routes
+ */
 
-// Muestra la view para actualizar
+/**
+ * @swagger
+ * /update:
+ *   get:
+ *     summary: Renders the user profile update form
+ *     tags:
+ *       - User
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: User profile update form rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Server error
+ */
 router.get('/update', isAuthenticated, (req, res) => {
     res.render('updateProfile', {user: req.user})
 })
 
-// Muestra mi usuario
+/**
+ * @swagger
+ * /profile:
+ *   get:
+ *     summary: Displays user profile with trips and posts
+ *     tags:
+ *       - User
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: User profile rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Server error
+ */
 router.get("/", isAuthenticated, async (req, res) => {
     const userId = req.user.id;
     const trips = await prisma.trip.findMany({
@@ -36,9 +76,33 @@ router.get("/", isAuthenticated, async (req, res) => {
     });
 });
 
-// Muestra un usuario
+/**
+ * @swagger
+ * /profile/:userId:
+ *   get:
+ *     summary: Displays another user's profile with trips and posts
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         type: string
+ *         required: true
+ *         description: ID of the user whose profile to display
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: Other user's profile rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
 router.get("/:userId", isAuthenticated, async (req, res) => {
-
     const user = await prisma.user.findUnique({  //RECOGE EL USUARIO CON EL ID DEL URL
         where: {
             id: req.params.userId,
@@ -70,7 +134,41 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
     });
 });
 
-// Actualiza un usuario
+/**
+ * @swagger
+ * /update:
+ *   put:
+ *     summary: Updates user profile information
+ *     tags:
+ *       - User
+ *     security:
+ *       - auth:
+ *         - user
+ *     requestBody:
+ *       required: true
+ *       description: User profile information to be updated
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username: 
+ *                 type: string
+ *               email:
+ *                 type: string
+ *             required: 
+ *               - username
+ *               - email
+ *     responses:
+ *       200:
+ *         description: User profile updated successfully
+ *       401:
+ *         description: Unauthorized access
+ *       400:
+ *         description: Invalid request body
+ *       500:
+ *         description: Server error
+ */
 router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -95,7 +193,27 @@ router.put('/update', isAuthenticated, upload.single('photo'), async (req, res) 
     }
 });
 
-// Elimina un usuario
+/**
+ * @swagger
+ * /delete:
+ *   delete:
+ *     summary: Deletes a user and all associated trips, posts, and comments.
+ *     tags:
+ *       - User
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: User associated trips, posts and comments deleted successfully
+ *         redirect: /user
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const userId = req.user.id;   // Recoge el ID del usuario que se va a eliminar
