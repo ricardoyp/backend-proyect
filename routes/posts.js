@@ -9,7 +9,52 @@ const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
 
-// Crear post en un trip
+/**
+ * @swagger
+ * /create/:tripId:
+ *   post:
+ *     summary: Creates a new post in a specific trip
+ *     tags:
+ *       - Post
+ *     security:
+ *       - auth:
+ *         - user
+ *     parameters:
+ *       - name: tripId
+ *         description: ID of the trip where the post will be created
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     requestBody:
+ *       description: Post creation data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               location:
+ *                 type: location
+ *                 description: Location of the post (latitude, longitude, name)
+ *               photo:
+ *                 type: string
+ *                 description: url of photo of the post
+ *             required:
+ *               - location
+ *               - photo
+ *     responses:
+ *       201:
+ *         description: Post created successfully
+ *         redirect: /trip/{tripId}
+ *       401:
+ *         description: Unauthorized access
+ *       400:
+ *         description: Invalid post data
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */
 router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (req, res) => {
     try {
         const coordinates = req.body.location.split(','); //SEPARA LA LOCALIZACION EN UN ARRAY CON LATITUDE Y LONGITUDE
@@ -45,7 +90,34 @@ router.post('/create/:tripId', isAuthenticated, upload.single('photo'), async (r
     }
 });
 
-// Muestra la pagina para crear post en un trip
+/**
+ * @swagger
+ * /create/:tripId:
+ *   get:
+ *     summary: Renders the post creation form for a specific trip
+ *     tags:
+ *       - Post
+ *     security:
+ *       - auth:
+ *         - user
+ *     parameters:
+ *       - name: tripId
+ *         description: ID of the trip where the post will be created
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Post creation form rendered successfully
+ *         schema:
+ *           $ref: '#/definitions/TripPostCreationForm'
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */
 router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     try {
 
@@ -68,7 +140,41 @@ router.get('/create/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
-// Elimina un post
+/**
+ * @swagger
+ * /delete:
+ *   delete:
+ *     summary: Deletes an existing post
+ *     tags:
+ *       - Post
+ *     security:
+ *       - auth:
+ *         - user
+ *     requestBody:
+ *       description: Request body containing the post ID and trip ID to be deleted
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tripId:
+ *                 type: integer
+ *                 description: ID of the trip where the post to be deleted belongs to
+ *               postId:
+ *                 type: integer
+ *                 description: ID of the post to be deleted
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *         redirect: /trip/{tripId}
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Trip or post not found
+ *       500:
+ *         description: Server error
+ */
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId; //RECOJO DEL BODY EL ID DEL VIAJE PARA VOLVER CUANDO SE ELIMINE EL POST

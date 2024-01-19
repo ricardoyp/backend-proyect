@@ -8,8 +8,43 @@ const prisma = require("../prisma");
 const upload = require('../config/multer');
 const handleUpload = require('../middleware/handleUpload');
 const isAuthenticated = require('..//middleware/isAuthenticated');
+/**
+ * @swagger
+ * tags:
+ *   - name: Trip
+ *     description: Trips Routes
+ */
 
-// Crear trip
+/**
+ * @swagger
+ * /create:
+ *   post:
+ *     summary: Creates a new trip
+ *     tags:
+ *       - Trip
+ *     requestBody:
+ *       description: Trip creation data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nameTrip:
+ *                 type: string
+ *                 description: Name of the new trip
+ *             required:
+ *               - nameTrip
+ *     responses:
+ *       201:
+ *         description: Trip created successfully
+ *       401:
+ *         description: Unauthorized access
+ *       400:
+ *         description: Invalid trip data
+ *       500:
+ *         description: Server error
+ */
 router.post('/create', isAuthenticated, async (req, res) => {
     try {
         const nameTrip = req.body.nameTrip;
@@ -27,6 +62,24 @@ router.post('/create', isAuthenticated, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /create:
+ *   get:
+ *     summary: Renders the trip creation form
+ *     tags:
+ *       - Trip
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: Trip creation form rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Server error
+ */
 router.get('/create', isAuthenticated, async (req, res) => {
     try {
         const userId = req.user.id;
@@ -41,7 +94,24 @@ router.get('/create', isAuthenticated, async (req, res) => {
     }
 });
 
-// Muestra los trips
+/**
+ * @swagger
+ * /social:
+ *   get:
+ *     summary: Displays social feed with trips and top users
+ *     tags:
+ *       - Trip
+ *     security:
+ *       - auth:
+ *         - user
+ *     responses:
+ *       200:
+ *         description: Social feed rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Server error
+ */
 router.get('/social', isAuthenticated, async (req, res) => {
     try {
         const trips = await prisma.trip.findMany({
@@ -72,7 +142,29 @@ router.get('/social', isAuthenticated, async (req, res) => {
     }
 });
 
-// Muestra un trip seleccionado
+/**
+ * @swagger
+ * /:tripId:
+ *   get:
+ *     summary: Retrieves a specific trip by ID and its details
+ *     tags:
+ *       - Trip
+ *     parameters:
+ *       - name: tripId
+ *         description: ID of the trip to be retrieved
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Trip details retrieved successfully
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */
 router.get('/:tripId', isAuthenticated, async (req, res) => {
     try {
         const trip = await prisma.trip.findUnique({
@@ -107,7 +199,32 @@ router.get('/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
-// Cambiar nombre del trip
+/**
+ * @swagger
+ * /updateName/:tripId:
+ *   get:
+ *     summary: Renders the trip name update form
+ *     tags:
+ *       - Trip
+ *     security:
+ *       - auth:
+ *         - user
+ *     parameters:
+ *       - name: tripId
+ *         description: ID of the trip to be updated
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Trip name update form rendered successfully
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */
 router.get('/updateName/:tripId', isAuthenticated, async (req, res) => {
     try {
         const userId = req.user.id;
@@ -127,6 +244,48 @@ router.get('/updateName/:tripId', isAuthenticated, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /updateName/:tripId:
+ *   put:
+ *     summary: Updates the name of a specific trip
+ *     tags:
+ *       - Trip
+ *     security:
+ *       - auth:
+ *         - user
+ *     parameters:
+ *       - name: tripId
+ *         description: ID of the trip whose name to be updated
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     requestBody:
+ *       description: Trip name update data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nameTrip:
+ *                 type: string
+ *                 description: Updated name of the trip
+ *             required:
+ *               - nameTrip
+ *     responses:
+ *       200:
+ *         description: Trip name updated successfully
+ *         redirect: /trip/{tripId}
+ *       401:
+ *         description: Unauthorized access
+ *       400:
+ *         description: Invalid trip data
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */ 
 router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
     const trip = await prisma.trip.update({
         where: {
@@ -139,7 +298,38 @@ router.put('/updateName/:tripId', isAuthenticated, async (req, res) => {
     res.redirect(`/trip/${trip.id}`);
 })
 
-// Eliminar trip
+/**
+ * @swagger
+ * /delete:
+ *   delete:
+ *     summary: Deletes a trip and all associated posts and comments
+ *     tags:
+ *       - Trip
+ *     security:
+ *       - auth:
+ *         - user
+ *     requestBody:
+ *       description: Request body containing the trip ID to be deleted
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tripId:
+ *                 type: integer
+ *                 description: ID of the trip to be deleted
+ *     responses:
+ *       200:
+ *         description: Trip and associated posts and comments deleted successfully
+ *         redirect: /auth/login-page
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Trip not found
+ *       500:
+ *         description: Server error
+ */
 router.delete("/delete", isAuthenticated, async (req, res) => {
     try {
         const tripId = req.body.tripId;   //RECOGE EL ID DEL VIAJE QUE SE VA A ELIMINAR
@@ -175,7 +365,7 @@ router.delete("/delete", isAuthenticated, async (req, res) => {
             }
         });
 
-        res.redirect(`/user`);
+        res.redirect(`/auth/login-page`);
     } catch (e) {
         console.log(e);
         res.json('Server error');
